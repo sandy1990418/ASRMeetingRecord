@@ -1,0 +1,6 @@
+langchain
+pymilvus
+openai
+openai-whisper
+torch
+transformers
