@@ -1,6 +1,11 @@
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
+import os
+
+
+with open('./api_key/openai_key.txt', 'r') as f: 
+    os.environ['OPENAI_API_KEY'] = f.read()
 
 
 class RAGChain:

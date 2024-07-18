@@ -1,92 +1,130 @@
 # RAG-ASR Integration Project
 
-## Overview
+An advanced Retrieval Augmented Generation (RAG) system integrated with Automatic Speech Recognition (ASR), leveraging the power of OpenAI's Whisper model, LangChain, and Milvus vector database. This project supports real-time transcription, information retrieval, and question answering.
 
-This project integrates Retrieval Augmented Generation (RAG) with Automatic Speech Recognition (ASR) for real-time transcription and information retrieval. It uses OpenAI's Whisper for speech recognition, Milvus as a vector database for efficient similarity search, and LangChain for the RAG pipeline.
+## 🌟 Features
 
-## Features
+- 🎙️ Real-time speech transcription using OpenAI's Whisper model
+- 🧠 RAG-based information retrieval and question answering
+- 🗄️ Efficient vector storage and search using Milvus
+- 🔗 Integration with LangChain for advanced NLP tasks
+- 🐳 Docker support for easy deployment of Milvus
 
-- Real-time speech transcription using Whisper
-- RAG-based information retrieval and question answering
-- Integration with Milvus for scalable vector storage
-- Flexible document loading and text splitting
-- Easy-to-use interface for processing audio queries
-
-## Prerequisites
-
-- Python 3.8+
-- Docker (for running Milvus)
-- OpenAI API key
-- Milvus server running locally or remotely
-
-## Installation
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/rag-asr-integration.git
-   cd rag-asr-integration
-   ```
-
-2. Set up a virtual environment:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-
-3. Install the required packages:
-   ```
-   pip install -r requirements.txt
-   ```
-
-4. Set up Milvus:
-   Follow the [official Milvus installation guide](https://milvus.io/docs/install_standalone-docker.md) to set up Milvus using Docker.
-
-5. Set your OpenAI API key as an environment variable:
-   ```
-   export OPENAI_API_KEY=your_api_key_here
-   ```
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 rag_asr_system/
+├── docker/
+│   └── docker-compose.yml
 ├── rag_asr_app.py
 ├── asr_interface.py
 ├── document_loader.py
 ├── vector_store.py
 ├── rag_chain.py
 ├── utils.py
-├── test_rag_asr_app.py
-└── requirements.txt
+├── requirements.txt
+└── README.md
 ```
 
-## Usage
+## 🛠️ Installation
 
-1. Run the main application:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/rag-asr-system.git
+   cd rag-asr-system
    ```
+
+2. Set up a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Set up Milvus using Docker:
+   ```bash
+   cd docker
+   docker-compose up -d
+   ```
+
+## 🚀 Usage
+
+### Running the RAG-ASR System
+
+1. Ensure Milvus is running:
+   ```bash
+   docker-compose ps
+   ```
+
+2. Set your OpenAI API key:
+   ```bash
+   export OPENAI_API_KEY=your_api_key_here
+   ```
+
+3. Run the main application:
+   ```bash
    python rag_asr_app.py
    ```
 
-2. When prompted, enter the path to your audio file. The system will transcribe the audio, process it through the RAG pipeline, and return the result.
+4. When prompted, enter the path to your audio file for transcription and querying.
 
-3. To exit the application, type 'quit' when prompted for an audio file path.
+## 🔧 Customization
 
-## Customization
+- 📊 Use different data sources by modifying the URL in `rag_asr_app.py`
+- 🛠️ Adjust ASR model settings in `asr_interface.py`
+- 🔬 Optimize vector search by modifying parameters in `vector_store.py`
+- 📝 Customize RAG prompts and chain in `rag_chain.py`
 
-- To use a different ASR model, modify the `ASRInterface` class in `asr_interface.py`.
-- To change the document source, update the URL in `rag_asr_app.py` or modify the `DocumentLoader` class in `document_loader.py`.
-- To adjust the RAG chain parameters, modify the `RAGChain` class in `rag_chain.py`.
+## 🧪 Testing
 
-## Testing
-
-Run the unit tests with:
+Run tests with pytest:
+```bash
+pytest tests/
 ```
-python -m unittest test_rag_asr_app.py
+
+## 💻 Performance Optimization
+
+To improve performance:
+
+1. 📉 Adjust batch sizes for vector storage and retrieval
+2. 🔽 Use a smaller Whisper model for faster ASR
+3. 📈 Implement caching mechanisms for frequently accessed data
+4. 🔀 Enable parallel processing for document loading and indexing
+
+## 📊 System Workflow
+
+The RAG-ASR system follows this high-level workflow:
+
+1. **ASR Transcription**: Audio input is transcribed to text using Whisper.
+2. **Document Indexing**: Relevant documents are loaded and indexed in Milvus.
+3. **Query Processing**: The transcribed text is used as a query for the RAG system.
+4. **Information Retrieval**: Relevant information is retrieved from Milvus.
+5. **Answer Generation**: An LLM generates an answer based on the retrieved context.
+
+```mermaid
+graph TD
+    A[Audio Input] --> B[ASR Transcription]
+    B --> C[Query Processing]
+    D[Document Corpus] --> E[Document Indexing]
+    E --> F[Milvus Vector Store]
+    C --> G[Information Retrieval]
+    F --> G
+    G --> H[Context Integration]
+    H --> I[Answer Generation]
+    I --> J[Final Output]
 ```
 
-## Acknowledgements
+## 📄 License
 
-- [OpenAI Whisper](https://github.com/openai/whisper) for ASR
-- [Milvus](https://milvus.io/) for vector similarity search
-- [LangChain](https://github.com/hwchase17/langchain) for the RAG pipeline
-- [OpenAI](https://openai.com/) for the language model and embeddings
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- OpenAI for the Whisper model
+- LangChain for the RAG framework
+- Milvus for the vector database
+- Hugging Face for the Transformers library

@@ -1,27 +1,30 @@
+from dotenv import load_dotenv
 from asr_interface import ASRInterface
 from document_loader import DocumentLoader
 from vector_store import MilvusVectorStore
 from rag_chain import RAGChain
 from utils import transcribe_audio
-import os 
 
-
-with open('./api_key/openai_key.txt', 'r') as f: 
-    os.environ['OPENAI_API_KEY'] = f.read()
+load_dotenv()
 
 
 class RAGASR:
-    def __init__(self):
+    def __init__(self, milvus_host="localhost", milvus_port=19530):
         self.asr = ASRInterface()
         self.document_loader = DocumentLoader()
-        self.vector_store = MilvusVectorStore()
-        self.rag_chain = RAGChain(self.vector_store)
+        self.vector_store = MilvusVectorStore(host=milvus_host, port=milvus_port)
+        self.rag_chain = None  # We'll initialize this after adding documents
 
     def index_data(self, url):
         documents = self.document_loader.load(url)
         self.vector_store.add_documents(documents)
+        # Initialize RAGChain after adding documents
+        self.rag_chain = RAGChain(self.vector_store)
 
     def process_audio(self, audio_file):
+        if self.rag_chain is None:
+            print("Please index data before processing audio.")
+            return None
         transcription = transcribe_audio(audio_file)
         return self.rag_chain.run(transcription)
 
@@ -35,4 +38,5 @@ if __name__ == "__main__":
         if audio_file.lower() == "quit":
             break
         result = rag_asr.process_audio(audio_file)
-        print(f"Result: {result}")
+        if result:
+            print(f"Result: {result}")
